@@ -7,6 +7,7 @@ from .serializers import FruitSerializer,VegetableSerializer,BestSellSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import filters, status
 from rest_framework.decorators import action
+from rest_framework.pagination import LimitOffsetPagination
 
 class ShopPageView(View):
     def get(self, request):
@@ -51,9 +52,10 @@ class FruitPageApiView(ModelViewSet):
     queryset = Fruit.objects.all()
     serializer_class = FruitSerializer
     filter_backends = (filters.SearchFilter,)
+    pagination_class = LimitOffsetPagination
     search_fields = ('title',)
 
-  @action(detail=False, methods=['GET'])
+    @action(detail=False, methods=['GET'])
     def euro(self, request, *args, **kwargs):
         fruits = self.get_queryset().filter(price_type='EURO').order_by('id')
         serializer = FruitSerializer(fruits, many=True)
@@ -86,6 +88,7 @@ class BestSellPageApiView(ModelViewSet):
     queryset = BestSell.objects.all()
     serializer_class = BestSellSerializer
     filter_backends = (filters.SearchFilter,)
+    pagination_class = LimitOffsetPagination
     search_fields = ('title',)
 
     @action(detail=False, methods=['GET'])
@@ -121,6 +124,7 @@ class VegetablePageApiView(ModelViewSet):
     queryset = Vegetable.objects.all()
     serializer_class = VegetableSerializer
     filter_backends = (filters.SearchFilter,)
+    pagination_class = LimitOffsetPagination
     search_fields = ('title',)
 
     @action(detail=False, methods=['GET'])
